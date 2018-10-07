@@ -31,8 +31,34 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
+
+function auth(req, res, next) {
+  console.log(req.headers);
+  var authHeader = req.headers.authorization;
+  if(!authHeader) {
+    var err = new Error('You are not authorized');
+    err.status = 401;
+    res.setHeader('WWW-Authenticate', 'Basic');
+    next(err);
+    return;
+  }
+  var autho = new Buffer.from(authHeader.split(' ')[1], 'base64').toString().split(':');
+  var username = autho[0];
+  var password = autho[1];
+  if(username === 'admin', password === 'password') {
+    next();
+  } else {
+    var err = new Error('You are not authorized');
+    err.status = 401;
+    res.setHeader('WWW-Authenticate', 'Basic');
+    next(err);
+  }
+}
+
+app.use(auth);
+
+app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/dishes', dishesRouter);
