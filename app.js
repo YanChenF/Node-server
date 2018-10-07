@@ -3,7 +3,9 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const mongoose = require('mongoose');
+var mongoose = require('mongoose');
+var session = require('express-session');
+var FileStore = require('session-file-store')(session);
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -31,11 +33,18 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser('123456-789-0'));
+app.use(session({
+  name: 'session-id',
+  secret: '123-4456-79980',
+  resave: false,
+  saveUninitialized: false,
+  store: new FileStore()
+}));
 
 
 function auth(req, res, next) {
-  console.log(req.headers);
-  if(!req.signedCookies.user) {
+  console.log(req.session);
+  if(!req.session.user) {
     var authHeader = req.headers.authorization;
     if(!authHeader) {
       var err = new Error('You are not authorized');
@@ -48,7 +57,7 @@ function auth(req, res, next) {
     var username = autho[0];
     var password = autho[1];
     if(username === 'admin', password === 'password') {
-      res.cookie('user', 'admin', {signed: true});
+      req.session.user = 'admin';
       next();
     } else {
       var err = new Error('You are not authorized');
@@ -57,7 +66,8 @@ function auth(req, res, next) {
       next(err);
     }
   } else {
-    if(req.signedCookies.user === 'admin') {
+    if(req.session.user === 'admin') {
+      console.log('req.session', req.session);
       next();
     } else {
       var err = new Error('You are not authorized');
