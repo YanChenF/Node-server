@@ -12,7 +12,7 @@ const commentSchema = new Schema({
     },
     comment: {
         type: String,
-        require: true
+        required: true
     },
     author: {
         type: mongoose.Schema.Types.ObjectId,
