@@ -26,7 +26,7 @@ Router.route('/')
     .then((favorite) => {
         if(!favorite){
             const user = req.user._id;
-            const dishes = req.body._id;
+            const dishes = req.body;
             return Favorite.create({user: user, dishes: dishes});
         } else {
             if(favorite.dishes.indexOf(req.body._id) === -1) {
