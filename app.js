@@ -16,6 +16,7 @@ var leadersRouter = require('./routes/leaderRouter');
 var dishesRouter = require('./routes/dishRouter');
 var promosRouter = require('./routes/promoRouter');
 var favoriteRouter = require('./routes/favoriteRouter');
+var commentRouter = require('./routes/commentRouter');
 
 
 const url = config.mongoUrl;
@@ -68,7 +69,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/dishes', dishesRouter);
 app.use('/promotions', promosRouter);
 app.use('/leaders', leadersRouter);
-app.use('/favorite', favoriteRouter);
+app.use('/favorites', favoriteRouter);
+app.use('/comments', commentRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
