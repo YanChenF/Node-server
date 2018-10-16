@@ -16,7 +16,7 @@ const commentSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    dish: {
+    dishId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Dish'
     }

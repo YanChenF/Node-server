@@ -20,6 +20,7 @@ Router.route('/')
 })
 .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     if(req.body) { //when will the req.body be null?
+        console.log(req.body);
         req.body.author = req.user._id;
         Comments.create(req.body)
         .then(comment => {
