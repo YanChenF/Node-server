@@ -14,9 +14,22 @@ Router.route('/')
         if(err) {
             return next(err);
         } else {
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'application/json');
-            res.json(favorites);           
+            if(!favorites) {
+                Favorite.create({user: req.user._id})
+                .then(favorites => {
+                    Favorite.findById(favorites._id).populate('user')
+                    .then(favorites => {
+                        res.statusCode = 200;
+                        res.setHeader('Content-Type', 'application/json');
+                        res.json(favorites);                                  
+                    })
+                }, err => next(err))
+                .catch(err => next(err));
+            } else {
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.json(favorites);  
+            }         
         }
     })
 })

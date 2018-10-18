@@ -6,6 +6,10 @@ const cors = require('./cors');
 const Comments = require('../models/comments');
 
 Router.use(bodyParser.json());
+Router.use(function(req, res, next) {
+    console.log(req.body);
+    next();
+});
 
 Router.route('/')
 .options(cors.corsWithOptions, (req, res) => { res.sendStatus(200); })
