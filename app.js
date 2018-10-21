@@ -18,6 +18,10 @@ var promosRouter = require('./routes/promoRouter');
 var favoriteRouter = require('./routes/favoriteRouter');
 var commentRouter = require('./routes/commentRouter');
 
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
+
 
 const url = config.mongoUrl;
 const connect = mongoose.connect(url, {useNewUrlParser: true});
