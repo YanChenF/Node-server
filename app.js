@@ -18,11 +18,6 @@ var promosRouter = require('./routes/promoRouter');
 var favoriteRouter = require('./routes/favoriteRouter');
 var commentRouter = require('./routes/commentRouter');
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-}
-
-
 const url = config.mongoUrl;
 const connect = mongoose.connect(url, {useNewUrlParser: true});
 
@@ -37,6 +32,10 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
 
 app.use(logger('dev'));
 app.use(express.json());
